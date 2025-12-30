@@ -14,7 +14,6 @@
         scroll-behavior: smooth;
         overflow-x: hidden;
     }
-
     section {
         height:100vh;
         display:flex;
@@ -27,24 +26,19 @@
         transform: translateY(50px);
         transition: all 1s ease-out;
     }
-
     section.visible {
         opacity:1;
         transform: translateY(0);
     }
-
     h1, h2 {
         color: #ff0000;
         text-shadow: 0 0 10px #ff0000,0 0 20px #ff0000,0 0 40px #ff0000;
         transition: text-shadow 0.5s, transform 0.5s;
     }
-
     h1.scroll-glow, h2.scroll-glow {
         text-shadow: 0 0 20px #ff0000,0 0 40px #ff3333,0 0 60px #ff6666;
         transform: scale(1.05);
     }
-
-    /* Background video */
     video#bg-video {
         position: fixed;
         top:50%;
@@ -57,8 +51,6 @@
         transform: translate(-50%, -50%);
         background-size: cover;
     }
-
-    /* Particle canvas */
     #particles {
         position:fixed;
         top:0;
@@ -67,8 +59,6 @@
         height:100%;
         z-index:-2;
     }
-
-    /* Neon buttons */
     .btn {
         padding:15px 30px;
         margin:10px;
@@ -85,25 +75,20 @@
         position:relative;
         overflow:hidden;
     }
-
     .btn:hover {
         box-shadow:0 0 20px #ff0000,0 0 40px #ff0000,0 0 60px #ff0000;
         background: rgba(255,0,0,0.2);
     }
-
     @keyframes pulse {
         0% { box-shadow: 0 0 5px #ff0000; }
         50% { box-shadow: 0 0 20px #ff0000,0 0 40px #ff0000; }
         100% { box-shadow: 0 0 5px #ff0000; }
     }
-
-    /* Social icons */
     .social-icons {
         display:flex;
         gap:20px;
         margin-top:20px;
     }
-
     .social-icons a {
         color:#ff0000;
         font-size:2em;
@@ -112,13 +97,10 @@
         transition:0.3s;
         position:relative;
     }
-
     .social-icons a:hover {
         color:#fff;
         text-shadow:0 0 20px #ff0000,0 0 40px #ff0000;
     }
-
-    /* Music controls */
     #music-controls {
         position:fixed;
         bottom:20px;
@@ -127,33 +109,27 @@
         z-index:2;
         text-align:center;
     }
-
     #volumeSlider {
         width:150px;
         margin-left:10px;
     }
-
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-<!-- Background video -->
 <video id="bg-video" autoplay muted loop>
-    <source src="642ef0a6-8fdb-414e-b83b-db77ce1bd98b.mp4" type="video/mp4">
+    <source src="assets/video.mp4" type="video/mp4">
 </video>
 
-<!-- Music -->
 <audio id="bg-music" autoplay loop>
-    <source src="a1ad6642-c98e-44a4-8880-3e3c963fe580.mp3" type="audio/mpeg">
+    <source src="assets/music.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Particle canvas -->
 <canvas id="particles"></canvas>
 
-<!-- Sections -->
 <section id="home">
-    <img src="logo.png" alt="Logo" style="width:200px; margin-bottom:20px;">
+    <img src="assets/logo.png" alt="Logo" style="width:200px; margin-bottom:20px;">
     <h1>Welcome to My Neon Website</h1>
     <div>
         <button class="btn" onclick="location.href='#about'">About</button>
@@ -176,7 +152,6 @@
     <p>Reach me via social icons or email. Neon effects make everything interactive!</p>
 </section>
 
-<!-- Music Controls -->
 <div id="music-controls">
     <button id="playBtn" class="btn">Play</button>
     <button id="pauseBtn" class="btn">Pause</button>
@@ -185,69 +160,25 @@
 
 <script>
 // Particle effect
-const canvas = document.getElementById('particles');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+const canvas=document.getElementById('particles');
+const ctx=canvas.getContext('2d');
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+let particlesArray=[];
+const colors=['#ff0000','#ff3333','#ff6666'];
 
-let particlesArray = [];
-const colors = ['#ff0000','#ff3333','#ff6666'];
-
-class Particle {
-    constructor(){
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 3 + 1;
-        this.speedX = Math.random() * 1 - 0.5;
-        this.speedY = Math.random() * 1 - 0.5;
-        this.color = colors[Math.floor(Math.random() * colors.length)];
-    }
-    update(){
-        this.x += this.speedX;
-        this.y += this.speedY;
-        if(this.x<0||this.x>canvas.width) this.speedX=-this.speedX;
-        if(this.y<0||this.y>canvas.height) this.speedY=-this.speedY;
-    }
-    draw(){
-        ctx.fillStyle=this.color;
-        ctx.shadowBlur=10;
-        ctx.shadowColor=this.color;
-        ctx.beginPath();
-        ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
-        ctx.fill();
-    }
-}
-
-function initParticles(num){
-    particlesArray=[];
-    for(let i=0;i<num;i++){
-        particlesArray.push(new Particle());
-    }
-}
-
-function animateParticles(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    particlesArray.forEach(p=>{
-        p.update();
-        p.draw();
-    });
-    requestAnimationFrame(animateParticles);
-}
-
+class Particle{constructor(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.size=Math.random()*3+1;this.speedX=Math.random()*1-0.5;this.speedY=Math.random()*1-0.5;this.color=colors[Math.floor(Math.random()*colors.length)];}update(){this.x+=this.speedX;this.y+=this.speedY;if(this.x<0||this.x>canvas.width)this.speedX=-this.speedX;if(this.y<0||this.y>canvas.height)this.speedY=-this.speedY;}draw(){ctx.fillStyle=this.color;ctx.shadowBlur=10;ctx.shadowColor=this.color;ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();}}
+function initParticles(num){particlesArray=[];for(let i=0;i<num;i++){particlesArray.push(new Particle());}}
+function animateParticles(){ctx.clearRect(0,0,canvas.width,canvas.height);particlesArray.forEach(p=>{p.update();p.draw();});requestAnimationFrame(animateParticles);}
 initParticles(200);
 animateParticles();
+window.addEventListener('resize',function(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;initParticles(200);});
 
-window.addEventListener('resize',function(){
-    canvas.width=window.innerWidth;
-    canvas.height=window.innerHeight;
-    initParticles(200);
-});
-
-// Music Controls
-const music = document.getElementById('bg-music');
-const playBtn = document.getElementById('playBtn');
-const pauseBtn = document.getElementById('pauseBtn');
-const volumeSlider = document.getElementById('volumeSlider');
+// Music controls
+const music=document.getElementById('bg-music');
+const playBtn=document.getElementById('playBtn');
+const pauseBtn=document.getElementById('pauseBtn');
+const volumeSlider=document.getElementById('volumeSlider');
 music.volume=0.5;
 playBtn.addEventListener('click',()=>{music.play();});
 pauseBtn.addEventListener('click',()=>{music.pause();});
@@ -263,19 +194,7 @@ analyser.fftSize=256;
 const bufferLength=analyser.frequencyBinCount;
 const dataArray=new Uint8Array(bufferLength);
 
-function visualize(){
-    requestAnimationFrame(visualize);
-    analyser.getByteFrequencyData(dataArray);
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    for(let i=0;i<bufferLength;i++){
-        const barHeight=dataArray[i]/2;
-        const x=i*(canvas.width/bufferLength);
-        ctx.fillStyle=`rgb(${barHeight+100},0,0)`;
-        ctx.shadowBlur=20;
-        ctx.shadowColor=`rgb(${barHeight+100},0,0)`;
-        ctx.fillRect(x,canvas.height-barHeight,canvas.width/bufferLength,barHeight);
-    }
-}
+function visualize(){requestAnimationFrame(visualize);analyser.getByteFrequencyData(dataArray);ctx.clearRect(0,0,canvas.width,canvas.height);for(let i=0;i<bufferLength;i++){const barHeight=dataArray[i]/2;const x=i*(canvas.width/bufferLength);ctx.fillStyle=`rgb(${barHeight+100},0,0)`;ctx.shadowBlur=20;ctx.shadowColor=`rgb(${barHeight+100},0,0)`;ctx.fillRect(x,canvas.height-barHeight,canvas.width/bufferLength,barHeight);}}
 visualize();
 
 // Scroll animations
@@ -283,15 +202,11 @@ const sections=document.querySelectorAll('section');
 window.addEventListener('scroll',()=>{
     sections.forEach(section=>{
         const rect=section.getBoundingClientRect();
-        if(rect.top<window.innerHeight*0.8){
-            section.classList.add('visible');
-            const heading=section.querySelector('h1,h2');
-            if(heading) heading.classList.add('scroll-glow');
-        }
+        if(rect.top<window.innerHeight*0.8){section.classList.add('visible');const heading=section.querySelector('h1,h2');if(heading)heading.classList.add('scroll-glow');}
     });
 });
 
-// Hover particle bursts for buttons
+// Hover particle bursts
 document.querySelectorAll('.btn,.social-icons a').forEach(el=>{
     el.addEventListener('mouseenter',e=>{
         for(let i=0;i<10;i++){
